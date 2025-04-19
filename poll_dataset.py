@@ -5,7 +5,7 @@ import pandas
 import os, sys
 
 class PollutionDataset(Dataset):
-    def __init__(self, root, param: {'PM10', 'NO2', 'C6H6'} = 'PM10'):
+    def __init__(self, root, param: {'PM10', 'NO2', 'C6H6'} = 'PM10', test = False, input_window = 10, output_window = 1):
         super().__init__()
         self.root = root
         param_id = {
@@ -14,38 +14,48 @@ class PollutionDataset(Dataset):
             'C6H6': '020_C6H6'
         }
         self.param = param_id[param]
+        self.test = test
+        self.input_window = input_window
+        self.output_window = output_window
 
-        self.data, self.targets = self.load_data()
+        self.sequences, self.targets = self.load_data()
     
     def load_data(self):
-        self.root = os.path.join(self.root, self.param)
+        self.root = os.path.join(self.root, 'TestSet' if self.test else 'TrainSet', self.param)
 
         try:
+            # concatenation data from all csv files
             data = numpy.array([], dtype=numpy.float32)
 
             for filename in os.listdir(self.root):
                 filepath = os.path.join(self.root, filename)
                 dataframe = pandas.read_csv(filepath, sep=',', usecols=['VALORE'], dtype=numpy.float32)
                 data = numpy.concatenate([data, dataframe.to_numpy().reshape(-1)], axis=0)
-            
-            targets = data[1 :]
-            data = data[0 : len(data) - 2]
-
-            data = torch.tensor(data, dtype=torch.float32)
-            targets = torch.tensor(targets, dtype=torch.float32)
-
-            return data, targets
         
         except FileNotFoundError as err:
             print(err.with_traceback(None), file=sys.stderr)
             sys.exit(1)
+        
+        # creation input and output sequences
+        sequences = []
+        targets = []
+
+        for i in range(len(data) - self.input_window - self.output_window + 1):
+            sequences.append(data[i : i + self.input_window])
+            targets.append(data[i + self.input_window : i + self.input_window + self.output_window])
+
+        sequences = torch.tensor(sequences, dtype=torch.float32).unsqueeze(-1)
+        targets = torch.tensor(targets, dtype=torch.float32).unsqueeze(-1)
+
+        return sequences, targets
     
     def __len__(self):
-        return len(self.data)
+        return len(self.sequences)
     
     def __getitem__(self, index):
-        return self.data[index], self.targets[index]
+        return self.sequences[index], self.targets[index]
+
 
 # for debugging
 if __name__ == '__main__':
-    poll = PollutionDataset(root='./Dataset', param='PM10')
+    poll = PollutionDataset(root='./Dataset_Inquinamento', param='PM10')
