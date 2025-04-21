@@ -19,8 +19,8 @@ def train_model(model, train_loader, loss_fun, optimizer, device):
     mae = 0.0
 
     for sequences, targets in train_loader:
-        sequences.to(device)
-        targets.to(device)
+        sequences = sequences.to(device)
+        targets = targets.to(device)
 
         predictions = model(sequences)
         loss = loss_fun(predictions, targets)
@@ -57,14 +57,3 @@ def test_model(model, test_loader, loss_fun, device):
     mae /= len(test_loader)
 
     return test_loss, mae
-
-
-# for debugging
-if __name__ == '__main__':
-    from poll_dataset import PollutionDataset
-    dataset = PollutionDataset(root='./Dataset', param='PM10')
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=1)
-    model = PollutionLSTM(input_size=1, hidden_size=32, n_predictions=1, num_layers=1)
-    for x, y in dataloader:
-        output = model(x)
-        print(output)

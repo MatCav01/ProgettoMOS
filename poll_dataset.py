@@ -25,27 +25,32 @@ class PollutionDataset(Dataset):
 
         try:
             # concatenation data from all csv files
-            data = numpy.array([], dtype=numpy.float32)
+            data = torch.tensor([], dtype=torch.float32)
 
             for filename in os.listdir(self.root):
                 filepath = os.path.join(self.root, filename)
                 dataframe = pandas.read_csv(filepath, sep=',', usecols=['VALORE'], dtype=numpy.float32)
-                data = numpy.concatenate([data, dataframe.to_numpy().reshape(-1)], axis=0)
+
+                df_tensor = torch.from_numpy(dataframe.to_numpy().reshape(-1))
+                data = torch.cat((data, df_tensor), dim=0)
         
         except FileNotFoundError as err:
             print(err.with_traceback(None), file=sys.stderr)
             sys.exit(1)
         
         # creation input and output sequences
-        sequences = []
-        targets = []
+        sequences = torch.tensor([], dtype=torch.float32)
+        targets = torch.tensor([], dtype=torch.float32)
 
         for i in range(len(data) - self.input_window - self.output_window + 1):
-            sequences.append(data[i : i + self.input_window])
-            targets.append(data[i + self.input_window : i + self.input_window + self.output_window])
+            sequence = data[i : i + self.input_window].unsqueeze(0)
+            target = data[i + self.input_window : i + self.input_window + self.output_window].unsqueeze(0)
+            
+            sequences = torch.cat((sequences, sequence), dim=0)
+            targets = torch.cat((targets, target), dim=0)
 
-        sequences = torch.tensor(sequences, dtype=torch.float32).unsqueeze(-1)
-        targets = torch.tensor(targets, dtype=torch.float32).unsqueeze(-1)
+        sequences = sequences.unsqueeze(-1)
+        targets = targets.unsqueeze(-1)
 
         return sequences, targets
     
@@ -54,8 +59,3 @@ class PollutionDataset(Dataset):
     
     def __getitem__(self, index):
         return self.sequences[index], self.targets[index]
-
-
-# for debugging
-if __name__ == '__main__':
-    poll = PollutionDataset(root='./Dataset_Inquinamento', param='PM10')

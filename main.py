@@ -21,20 +21,22 @@ test_dataset = PollutionDataset(root='./Dataset_Inquinamento', param='NO2', test
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+input_size = train_dataset.sequences.size(-1)
+
 # SGD
-sgd_net = PollutionLSTM(input_window, hidden_size, n_predictions, n_layers).to(device)
+sgd_net = PollutionLSTM(input_size, hidden_size, n_predictions, n_layers).to(device)
 sgd_optimizer = torch.optim.SGD(params=sgd_net.parameters(), lr=sgd_lr)
 
 # Adam
-adam_net = PollutionLSTM(input_window, hidden_size, n_predictions, n_layers).to(device)
+adam_net = PollutionLSTM(input_size, hidden_size, n_predictions, n_layers).to(device)
 adam_optimizer = torch.optim.Adam(params=adam_net.parameters(), lr=adam_lr)
 
 # RMSprop
-rmsprop_net = PollutionLSTM(input_window, hidden_size, n_predictions, n_layers).to(device)
+rmsprop_net = PollutionLSTM(input_size, hidden_size, n_predictions, n_layers).to(device)
 rmsprop_optimizer = torch.optim.RMSprop(params=rmsprop_net.parameters(), lr=rmsprop_lr)
 
 # Adagrad
-adagrad_net = PollutionLSTM(input_window, hidden_size, n_predictions, n_layers).to(device)
+adagrad_net = PollutionLSTM(input_size, hidden_size, n_predictions, n_layers).to(device)
 adagrad_optimizer = torch.optim.Adagrad(params=adagrad_net.parameters(), lr=adagrad_lr)
 
 loss_fun = torch.nn.MSELoss()
@@ -42,6 +44,7 @@ loss_fun = torch.nn.MSELoss()
 # weights = input('Do you want to train new models or load existing parameters? (train or load) ')
 # if weights == 'train':
 # training
+print('Training:')
 for epoch in range(n_epochs):
     sgd_train_loss, sgd_train_mae = train_model(sgd_net, train_loader, loss_fun, sgd_optimizer, device)
     adam_train_loss, adam_train_mae = train_model(adam_net, train_loader, loss_fun, adam_optimizer, device)
@@ -52,7 +55,7 @@ for epoch in range(n_epochs):
     print(f'SGD loss:\t{sgd_train_loss:.6f}\t\tSGD MAE:\t{sgd_train_mae:.6f}')
     print(f'Adam loss:\t{adam_train_loss:.6f}\t\tAdam MAE:\t{adam_train_mae:.6f}')
     print(f'RMSprop loss:\t{rmsprop_train_loss:.6f}\t\tRMSprop MAE:\t{rmsprop_train_mae:.6f}')
-    print(f'Adagrad loss:\t{adagrad_train_loss:.6f}\t\tAdagrad MAE:\t{adagrad_train_mae:.6f}')
+    print(f'Adagrad loss:\t{adagrad_train_loss:.6f}\t\tAdagrad MAE:\t{adagrad_train_mae:.6f}\n')
     
 #     save_params = input('Do you want to save the models parameters? (yes or anything else) ')
 #     if save_params == 'yes':
@@ -71,3 +74,9 @@ sgd_test_loss, sgd_test_mae = test_model(sgd_net, test_loader, loss_fun, sgd_opt
 adam_test_loss, adam_test_mae = test_model(adam_net, test_loader, loss_fun, adam_optimizer, device)
 rmsprop_test_loss, rmsprop_test_mae = test_model(rmsprop_net, test_loader, loss_fun, rmsprop_optimizer, device)
 adagrad_test_loss, adagrad_test_mae = test_model(adagrad_net, test_loader, loss_fun, adagrad_optimizer, device)
+
+print(f'Test:')
+print(f'SGD loss:\t{sgd_test_loss:.6f}\t\tSGD MAE:\t{sgd_test_mae:.6f}')
+print(f'Adam loss:\t{adam_test_loss:.6f}\t\tAdam MAE:\t{adam_test_mae:.6f}')
+print(f'RMSprop loss:\t{rmsprop_test_loss:.6f}\t\tRMSprop MAE:\t{rmsprop_test_mae:.6f}')
+print(f'Adagrad loss:\t{adagrad_test_loss:.6f}\t\tAdagrad MAE:\t{adagrad_test_mae:.6f}')
