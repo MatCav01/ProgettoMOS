@@ -42,15 +42,16 @@ def test_model(model, test_loader, loss_fun, device):
     test_loss = 0.0
     mae = 0.0
 
-    for sequences, targets in test_loader:
-        sequences.to(device)
-        targets.to(device)
+    with torch.no_grad():
+        for sequences, targets in test_loader:
+            sequences.to(device)
+            targets.to(device)
 
-        predictions = model(sequences)
-        loss = loss_fun(predictions, targets)
+            predictions = model(sequences)
+            loss = loss_fun(predictions, targets)
 
-        test_loss += loss.item()
-        mae += torch.mean(torch.abs(predictions - targets))
+            test_loss += loss.item()
+            mae += torch.mean(torch.abs(predictions - targets))
 
     test_loss /= len(test_loader)
     mae /= len(test_loader)
