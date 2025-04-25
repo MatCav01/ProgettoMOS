@@ -12,8 +12,11 @@ class PollutionLSTM(torch.nn.Module):
 
         return out
     
-def train_model(model: PollutionLSTM, train_loader: torch.utils.data.DataLoader,
-                loss_fun: torch.nn.MSELoss, optimizer: torch.optim.Optimizer, device: torch.device):
+def train_model(model: PollutionLSTM,
+                train_loader: torch.utils.data.DataLoader,
+                loss_fun: torch.nn.MSELoss,
+                optimizer: torch.optim.Optimizer,
+                device: torch.device):
     model.train()
     train_loss = 0.0
     mae = 0.0
@@ -30,15 +33,17 @@ def train_model(model: PollutionLSTM, train_loader: torch.utils.data.DataLoader,
         optimizer.step()
 
         train_loss += loss.item()
-        mae += torch.mean(torch.abs(predictions - targets))
+        mae += torch.sum(torch.abs(predictions - targets)).item()
 
     train_loss /= len(train_loader) * train_loader.batch_size
-    mae /= len(train_loader)
+    mae /= len(train_loader) * train_loader.batch_size
 
     return train_loss, mae
 
-def test_model(model: PollutionLSTM, test_loader: torch.utils.data.DataLoader,
-               loss_fun: torch.nn.MSELoss, device: torch.device):
+def test_model(model: PollutionLSTM,
+               test_loader: torch.utils.data.DataLoader,
+               loss_fun: torch.nn.MSELoss,
+               device: torch.device):
     model.eval()
     test_loss = 0.0
     mae = 0.0
@@ -52,9 +57,9 @@ def test_model(model: PollutionLSTM, test_loader: torch.utils.data.DataLoader,
             loss = loss_fun(predictions, targets)
 
             test_loss += loss.item()
-            mae += torch.mean(torch.abs(predictions - targets))
+            mae += torch.sum(torch.abs(predictions - targets)).item()
 
     test_loss /= len(test_loader) * test_loader.batch_size
-    mae /= len(test_loader)
+    mae /= len(test_loader) * test_loader.batch_size
 
     return test_loss, mae

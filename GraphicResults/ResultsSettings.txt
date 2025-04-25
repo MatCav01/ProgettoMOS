@@ -1,0 +1,13 @@
+1: input_window = 10, hidden_size = 32
+2: input_window = 10, hidden_size = 32, sgd_lr = 0.01, adam_lr = 0.005, rmsprop_lr = 0.05, adagrad_lr = 0.05
+3: input_window = 10, hidden_size = 64
+4: input_window = 10, hidden_size = 10
+5: input_window = 24, hidden_size = 32, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches
+6: input_window = 24, hidden_size = 64, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches
+7: input_window = 48, hidden_size = 64, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches
+8: input_window = 24, hidden_size = 64, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches,
+    sgd_lr = 0.0005, adam_lr = 0.0005, rmsprop_lr = 0.005, adagrad_lr = 0.005
+9: input_window = 24, hidden_size = 64, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches,
+    sgd_lr = 0.002, adam_lr = 0.002, rmsprop_lr = 0.02, adagrad_lr = 0.02
+10: input_window = 24, hidden_size = 64, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches,
+    sgd_lr = 0.005, adam_lr = 0.005, rmsprop_lr = 0.05, adagrad_lr = 0.05
