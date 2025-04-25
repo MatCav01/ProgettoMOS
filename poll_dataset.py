@@ -1,10 +1,9 @@
-from torch.utils.data import Dataset
 import torch
 import numpy
 import pandas
 import os, sys
 
-class PollutionDataset(Dataset):
+class PollutionDataset(torch.utils.data.Dataset):
     def __init__(self, root, param: {'PM10', 'NO2', 'C6H6'} = 'PM10', test = False, input_window = 10, output_window = 1):
         super().__init__()
         self.root = root
@@ -50,7 +49,7 @@ class PollutionDataset(Dataset):
             targets = torch.cat((targets, target), dim=0)
 
         sequences = sequences.unsqueeze(-1)
-        targets = targets.unsqueeze(-1)
+        # targets = targets.unsqueeze(-1)
 
         return sequences, targets
     
