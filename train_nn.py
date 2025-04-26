@@ -33,10 +33,10 @@ def train_model(model: PollutionLSTM,
         optimizer.step()
 
         train_loss += loss.item()
-        mae += torch.sum(torch.abs(predictions - targets)).item()
+        mae += torch.mean(torch.abs(predictions - targets)).item()
 
-    train_loss /= len(train_loader) * train_loader.batch_size
-    mae /= len(train_loader) * train_loader.batch_size
+    train_loss /= len(train_loader) #* train_loader.batch_size
+    mae /= len(train_loader) #* train_loader.batch_size
 
     return train_loss, mae
 
@@ -57,9 +57,9 @@ def test_model(model: PollutionLSTM,
             loss = loss_fun(predictions, targets)
 
             test_loss += loss.item()
-            mae += torch.sum(torch.abs(predictions - targets)).item()
+            mae += torch.mean(torch.abs(predictions - targets)).item()
 
-    test_loss /= len(test_loader) * test_loader.batch_size
-    mae /= len(test_loader) * test_loader.batch_size
+    test_loss /= len(test_loader) #* test_loader.batch_size
+    mae /= len(test_loader) #* test_loader.batch_size
 
     return test_loss, mae

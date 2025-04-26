@@ -6,13 +6,13 @@ from plots import plot_losses
 
 batch_size = 32
 input_window = 24
-hidden_size = 64
+hidden_size = 32
 n_predictions = 1
 n_layers = 1
-sgd_lr = 0.005
-adam_lr = 0.005
-rmsprop_lr = 0.05
-adagrad_lr = 0.05
+sgd_lr = 0.001
+adam_lr = 0.001
+rmsprop_lr = 0.01
+adagrad_lr = 0.01
 n_epochs = 50
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -40,7 +40,7 @@ rmsprop_optimizer = torch.optim.RMSprop(params=rmsprop_net.parameters(), lr=rmsp
 adagrad_net = PollutionLSTM(input_size, hidden_size, n_predictions, n_layers).to(device)
 adagrad_optimizer = torch.optim.Adagrad(params=adagrad_net.parameters(), lr=adagrad_lr)
 
-loss_fun = torch.nn.MSELoss(reduction='sum')
+loss_fun = torch.nn.MSELoss()#reduction='sum')
 
 sgd_loss_history = []
 adam_loss_history = []
@@ -66,6 +66,7 @@ for epoch in range(n_epochs):
     print(f'RMSprop loss:\t{rmsprop_train_loss:.6f}\t\tRMSprop MAE:\t{rmsprop_train_mae:.6f}')
     print(f'Adagrad loss:\t{adagrad_train_loss:.6f}\t\tAdagrad MAE:\t{adagrad_train_mae:.6f}\n')
     
+# test
 sgd_test_loss, sgd_test_mae = test_model(sgd_net, test_loader, loss_fun, device)
 adam_test_loss, adam_test_mae = test_model(adam_net, test_loader, loss_fun, device)
 rmsprop_test_loss, rmsprop_test_mae = test_model(rmsprop_net, test_loader, loss_fun, device)
@@ -77,4 +78,5 @@ print(f'Adam loss:\t{adam_test_loss:.6f}\t\tAdam MAE:\t{adam_test_mae:.6f}')
 print(f'RMSprop loss:\t{rmsprop_test_loss:.6f}\t\tRMSprop MAE:\t{rmsprop_test_mae:.6f}')
 print(f'Adagrad loss:\t{adagrad_test_loss:.6f}\t\tAdagrad MAE:\t{adagrad_test_mae:.6f}')
 
+# plot
 plot_losses(sgd_loss_history, adam_loss_history, rmsprop_loss_history, adagrad_loss_history)

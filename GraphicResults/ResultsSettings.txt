@@ -11,3 +11,5 @@
     sgd_lr = 0.002, adam_lr = 0.002, rmsprop_lr = 0.02, adagrad_lr = 0.02
 10: input_window = 24, hidden_size = 64, MSELoss(reduction='sum'), MAE of all dataset and not mean of batches,
     sgd_lr = 0.005, adam_lr = 0.005, rmsprop_lr = 0.05, adagrad_lr = 0.05
+11: input_window = 24, hidden_size = 64
+12: input_window = 24, hidden_size = 32
