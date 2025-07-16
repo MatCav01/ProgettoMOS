@@ -3,16 +3,17 @@ import torch
 from poll_dataset import PollutionDataset
 from train_nn import PollutionLSTM, train_model, test_model
 from plots import plot_losses
+import pandas
 
 batch_size = 32
 input_window = 24
-hidden_size = 32
+hidden_size = 64
 n_predictions = 1
 n_layers = 1
-sgd_lr = 0.001
-adam_lr = 0.001
-rmsprop_lr = 0.01
-adagrad_lr = 0.01
+sgd_lr = 0.0005
+adam_lr = 0.0005
+rmsprop_lr = 0.005
+adagrad_lr = 0.005
 n_epochs = 50
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -77,6 +78,19 @@ print(f'SGD loss:\t{sgd_test_loss:.6f}\t\tSGD MAE:\t{sgd_test_mae:.6f}')
 print(f'Adam loss:\t{adam_test_loss:.6f}\t\tAdam MAE:\t{adam_test_mae:.6f}')
 print(f'RMSprop loss:\t{rmsprop_test_loss:.6f}\t\tRMSprop MAE:\t{rmsprop_test_mae:.6f}')
 print(f'Adagrad loss:\t{adagrad_test_loss:.6f}\t\tAdagrad MAE:\t{adagrad_test_mae:.6f}')
+
+# print metrics as a pandas dataframe
+with open(file='./results.txt', mode='at') as f:
+    column_names = ['Algorithm', 'Learning Rate', 'Loss Value', 'MAE']
+    data = [
+        ['SGD', sgd_lr, sgd_test_loss, sgd_test_mae],
+        ['Adam', adam_lr, adam_test_loss, adam_test_mae],
+        ['RMSprop', rmsprop_lr, rmsprop_test_loss, rmsprop_test_mae],
+        ['Adagrad', adagrad_lr, adagrad_test_loss, adagrad_test_mae]
+    ]
+    df = pandas.DataFrame(data=data, columns=column_names)
+    
+    print(f'Input Window: {input_window}, Hidden Size: {hidden_size}\n{df}\n', file=f)
 
 # plot
 plot_losses(sgd_loss_history, adam_loss_history, rmsprop_loss_history, adagrad_loss_history)

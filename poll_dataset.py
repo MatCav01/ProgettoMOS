@@ -2,9 +2,13 @@ import torch
 import numpy
 import pandas
 import os, sys
+from typing import Literal
 
 class PollutionDataset(torch.utils.data.Dataset):
-    def __init__(self, root, param: {'PM10', 'NO2', 'C6H6'} = 'PM10', test = False, input_window = 10, output_window = 1):
+    def __init__(self, root, param: Literal['PM10', 'NO2', 'C6H6'] = 'NO2', test = False, input_window = 10, output_window = 1):
+        if param not in ['PM10', 'NO2', 'C6H6']:
+            raise ValueError('PollutionDataset param must be \'PM10\' or \'NO2\' or \'C6H6\'')
+        
         super().__init__()
         self.root = root
         param_id = {

@@ -1,0 +1,56 @@
+Input Window: 24, Hidden Size: 32
+  Algorithm  Learning Rate  Loss Value       MAE
+0       SGD          0.001   84.471463  7.444082
+1      Adam          0.001   25.880395  3.735337
+2   RMSprop          0.010   34.788501  4.572163
+3   Adagrad          0.010   26.471408  3.816170
+
+Input Window: 24, Hidden Size: 64
+  Algorithm  Learning Rate  Loss Value       MAE
+0       SGD          0.001   76.763083  6.811683
+1      Adam          0.001   27.092558  3.864941
+2   RMSprop          0.010   30.724742  4.171818
+3   Adagrad          0.010   26.116030  3.784625
+
+Input Window: 48, Hidden Size: 64
+  Algorithm  Learning Rate  Loss Value       MAE
+0       SGD          0.001   86.178808  7.295582
+1      Adam          0.001   26.327746  3.782809
+2   RMSprop          0.010   31.745938  4.241791
+3   Adagrad          0.010   25.954054  3.788972
+
+Input Window: 48, Hidden Size: 128
+  Algorithm  Learning Rate  Loss Value       MAE
+0       SGD          0.001   99.063568  7.950874
+1      Adam          0.001   27.081195  3.828857
+2   RMSprop          0.010   30.064069  4.061233
+3   Adagrad          0.010   26.003566  3.784830
+
+Input Window: 24, Hidden Size: 32
+  Algorithm  Learning Rate  Loss Value        MAE
+0       SGD          0.005  176.126115  10.883492
+1      Adam          0.005   26.668786   3.751644
+2   RMSprop          0.050   38.437658   4.820014
+3   Adagrad          0.050   26.106024   3.779611
+
+Input Window: 24, Hidden Size: 64
+  Algorithm  Learning Rate  Loss Value        MAE
+0       SGD          0.005  166.854772  10.466334
+1      Adam          0.005   26.420261   3.765656
+2   RMSprop          0.050   35.661940   4.650959
+3   Adagrad          0.050   26.076441   3.781700
+
+Input Window: 24, Hidden Size: 32
+  Algorithm  Learning Rate  Loss Value       MAE
+0       SGD         0.0005   75.808897  6.696562
+1      Adam         0.0005   26.895945  3.889386
+2   RMSprop         0.0050   26.382371  3.747948
+3   Adagrad         0.0050   27.412973  3.825244
+
+Input Window: 24, Hidden Size: 64
+  Algorithm  Learning Rate  Loss Value       MAE
+0       SGD         0.0005   52.823341  5.565199
+1      Adam         0.0005   25.385942  3.707576
+2   RMSprop         0.0050   27.427405  3.851674
+3   Adagrad         0.0050   26.194140  3.786965
+
